@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head style="font-family: 'Arial', 'Verdana', sans-serif;">
+    <meta charset="UTF-8">
+    <title>Результат выборки</title>
+	<link type="text/css" href="{% static 'reports/css/style.css' %}" rel="stylesheet" />
+
+</head>
+<body style="font-family: 'Arial', 'Verdana', sans-serif">
+
+<div class="content">
+
+<div class="header_div">
+	<form method="post">
+	{% csrf_token %}
+        <p style="font-size: 14px; ">Период с
+            <input type="month" name="date_start" style="font-size: 14px; outline:none;" value="{{ default_start_date }}"> по
+            <input type="month" name="date_end" style="font-size: 14px; outline:none;" value="{{ default_end_date }}">
+            <input type="text" name="inn" placeholder="ИНН" style="font-size: 14px; outline:none;" value="{{ default_inn }}">
+            <input type="text" name="name" placeholder="Наименование" style="font-size: 14px; outline:none;" value="{{ default_name }}">
+            <input type="submit" value="Показать" style="font-size: 14px;" name="filter">
+
+        </p>
+	</form>
+
+		<p style="font-size: 16px; color: #808080;"><b>{{ group_name }} </b><button style="font-size: 14px;"><a href="{% url 'logout' %}" style="text-decoration: none; color: #000000; ">Выйти</a></button></p>
+
+</div>
+
+
+<div class="scroll-table">
+    <div class="theader">
+        <table>
+                <col style="width:4%">
+                <col style="width:10%">
+                <col style="width:10%">
+                <col style="width:9%">
+                <col style="width:8%">
+                <col style="width:15%">
+                <col style="width:10%">
+                <col style="width:8%">
+                <col style="width:10%">
+                <col style="width:8%">
+                <col style="width:8%">
+            <thead>
+                <tr>
+                    <th rowspan="2">№</th>
+                    <th colspan="2" >Контрагент</th>
+                    <th colspan="4">Начисление контрагенту</th>
+                    <th colspan="2">Платеж</th>
+                    <th colspan="2">Вознаграждение</th>
+                </tr>
+                <tr>
+                    <th>ИНН</th>
+                    <th>Наименование</th>
+                    <th>Документ</th>
+                    <th>Дата</th>
+                    <th>Наименование услуги</th>
+                    <th>Стоимость услуги с налогом</th>
+                    <th>Дата</th>
+                    <th>Сумма</th>
+                    <th>Отчетный месяц</th>
+                    <th>Выплата {{ fee }}%</th>
+
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div class="main-table">
+<div class="scroll-table">
+	<div class="scroll-table-body">
+		<table>
+                <col style="width:4%">
+                <col style="width:10%">
+                <col style="width:10%">
+                <col style="width:9%">
+                <col style="width:8%">
+                <col style="width:15%">
+                <col style="width:10%">
+                <col style="width:8%">
+                <col style="width:10%">
+                <col style="width:8%">
+                <col style="width:8%">
+			<tbody>
+			{% for row in result_sheet %}
+
+
+				<tr>
+					<td>{{ forloop.counter }}.</td>
+					<td>{{ row.0 }}</td>
+					<td>{{ row.1 }}</td>
+					<td>{{ row.2 }}</td>
+					<td>{{ row.3 }}</td>
+					<td>{{ row.4 }}</td>
+					<td>{{ row.5 }}</td>
+					<td>{{ row.6 }}</td>
+					<td>{{ row.7 }}</td>
+					<td>{{ row.8 }}</td>
+					<td>{{ row.9 }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+
+<div class="footer">
+<div class="scroll-table">
+	<table>
+                <col style="width:4%">
+                <col style="width:10%">
+                <col style="width:10%">
+                <col style="width:9%">
+                <col style="width:8%">
+                <col style="width:15%">
+                <col style="width:10%">
+                <col style="width:8%">
+                <col style="width:10%">
+                <col style="width:8%">
+                <col style="width:8%">
+		<thead>
+			<tr>
+				<th colspan="5" style="background: #FFFFFF; border: 0px">
+					{% if group_name == 'Персонал' %}
+
+					<form enctype="multipart/form-data" method="post" id="the_form" action="{% url 'result' %}">
+						{% csrf_token %}
+						<p>
+							<input class="file" type="file" name="excel_file" accept=".xlsx, .xls" style="font-size: 14px;" required id="file_input" onchange="let submitButton = document.querySelector('.submit-button'); submitButton.disabled = false;">
+							<input class="submit-button" type="submit" value="Отправить" style="font-size: 14px;" name="download_file" onclick="var e=this;setTimeout(function(){e.disabled=true;},0);return true;">
+                            {% include 'reports/messages.html' %}
+						</p>
+					</form>
+                    <script>
+                        let file_field = document.querySelector('.file');
+                        let submitButton = document.querySelector('.submit-button');
+                        if (file_field.checked) {
+                          submitButton.disabled = false
+                        } else {submitButton.disabled = true}
+                    </script>
+					{% endif %}
+
+				</th>
+
+				<th colspan="1" style="background: #FFFFFF; border: 1px solid #ddd">Итого за период:</th>
+				<th colspan="1" style="background: #FFFFFF; border: 1px solid #ddd">{{amount_services}}</th>
+				<th colspan="1"style="background: #FFFFFF; border: 0px"></th>
+				<th colspan="1" style="background: #FFFFFF; border: 1px solid #ddd">{{amount_payments}}</th>
+				<th colspan="1"style="background: #FFFFFF; border: 0px"></th>
+				<th colspan="1" style="background: #FFFFFF; border: 1px solid #ddd">{{amount_fee}}</th>
+
+			</tr>
+		</thead>
+	</table>
+</div>
+</div>
+</div>
+</body>
+
+</html>

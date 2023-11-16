@@ -1,0 +1,89 @@
+.content {
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 800px;
+    align-items: center;
+}
+
+.main-table {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.header_div {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 15px;
+
+
+}
+
+.theader {
+	border: none;
+	margin-right: 15px;
+}
+
+
+
+.theader thead th {
+	font-weight: bold;
+	text-align: left;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	padding: 5px 8px;
+    background: #f9a34b;
+	font-size: 14px;
+}
+
+.scroll-table table{
+    width: 100%;
+    word-break: break-word;
+}
+
+.scroll-table-body {
+    position: relative;
+	max-height: 65vh;
+	overflow:auto;
+	scrollbar-gutter: stable;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #eee;
+}
+
+.scroll-table thead th {
+	font-weight: bold;
+	text-align: left;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	padding: 5px 8px;
+    background: #f9a34b;
+	font-size: 14px;
+}
+.scroll-table tbody td {
+	text-align: left;
+	border: 1px solid #ddd;
+	padding: 5px 8px;
+	font-size: 14px;
+	vertical-align: top;
+}
+
+.footer {
+    border: none;
+	margin-right: 15px;
+}
+
+.scroll-table tbody tr:hover td {
+    background-color: #FFE4E1;
+	cursor: pointer;
+}
+/* Стили для скролла */
+::-webkit-scrollbar {
+	width: 15px;
+}
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
